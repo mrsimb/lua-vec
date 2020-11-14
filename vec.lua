@@ -69,7 +69,7 @@ function Vec.random()
   ):norm()
 end
 
--- Operator overloads
+-- Metamethods
 
 --- + operator
 -- @param v number | table | Vec
@@ -156,12 +156,12 @@ function Vec.mt:__le(v)
 end
 
 --- .. operator
--- @param s string
--- @param v Vec
--- @return string Vector concatenated with str
--- @usage print('Position is ' .. Vec(1, 2, 3)) -> 'Position is {1, 2, 3}'
-function Vec.mt.__concat(s, v)
-  return s .. v:toString()
+-- @param a string | Vec
+-- @param b string | Vec
+-- @return string
+-- @usage 'Position is ' .. Vec(1, 2, 3) -> 'Position is {1, 2, 3}'
+function Vec.mt.__concat(a, b)
+  return tostring(a) .. tostring(b)
 end
 
 --- tostring()
