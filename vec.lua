@@ -1,6 +1,7 @@
 --- 3D vector implementation in lua
 -- Was created as inline library to use in Principia game
 -- This file is mostly for documentation, you might want to use minified version in your code
+-- Minified version https://github.com/mrsimb/lua-vec/blob/main/vec.min.lua
 -- @author mrsimb https://github.com/mrsimb
 
 Vec = {}
