@@ -10,12 +10,66 @@ Vec.mt.__index = Vec
 
 setmetatable(Vec, Vec.protomt)
 
+-- Static methods
+
 --- Vec() constructor
 -- @return Vec
 -- @see Vec.from
 function Vec.protomt:__call(x, y, z)
   return Vec.from(x, y, z)
 end
+
+--- Constructs new vector. Call Vec() directly to achieve same result
+-- @param x number | table | Vec = 0
+-- @param y number = 0
+-- @param z number = 0
+-- @return Vec
+-- @usage Vec(1, 0, 0)
+-- @usage Vec({1, 0, 0})
+-- @usage Vec({x = 1, y = 0, z = 0})
+-- @usage Vec(anotherVector)
+function Vec.from(x, y, z)
+  if (type(x) == 'table') then
+    return Vec.from(x.x or x[1], x.y or x[2], x.z or x[3])
+  end
+  
+  local v = {}
+
+  v.x = x or 0
+  v.y = y or 0
+  v.z = z or 0
+  
+  setmetatable(v, Vec.mt)
+
+  return v
+end
+
+--- Returns normalized vector from 2D angle
+-- @param a number = 0
+-- @return Vec
+-- @usage Vec.fromAngle(0) -> {1, 0, 0}
+function Vec.fromAngle(a)
+  return Vec.from(math.cos(a or 0), math.sin(a or 0))
+end
+
+--- Returns normalized vector from random 2D angle
+-- @return Vec
+function Vec.random2d()
+  local a = math.random() * math.pi * 2;
+  return Vec.fromAngle(a)
+end
+
+--- Returns normalized random vector
+-- @return Vec
+function Vec.random()
+  return Vec(
+    math.random() * 2 - 1,
+    math.random() * 2 - 1,
+    math.random() * 2 - 1
+  ):norm()
+end
+
+-- Operator overloads
 
 --- + operator
 -- @param v number | table | Vec
@@ -116,6 +170,8 @@ end
 function Vec.mt:__tostring()
   return self:toString()
 end
+
+-- Public methods
 
 --- Sets vector components to input. Accepts numbers, table or Vec
 -- @param x number | table | Vec = self.x
@@ -400,56 +456,4 @@ function Vec:lerp(n, x, y, z)
     self.y + (v.y - self.y) * n,
     self.z + (v.z - self.z) * n
   )
-end
-
--- Static methods
-
---- Returns normalized vector from 2D angle
--- @param a number = 0
--- @return Vec
--- @usage Vec.fromAngle(0) -> {1, 0, 0}
-function Vec.fromAngle(a)
-  return Vec.from(math.cos(a or 0), math.sin(a or 0))
-end
-
---- Returns normalized vector from random 2D angle
--- @return Vec
-function Vec.random2d()
-  local a = math.random() * math.pi * 2;
-  return Vec.fromAngle(a)
-end
-
---- Returns normalized random vector
--- @return Vec
-function Vec.random()
-  return Vec(
-    math.random() * 2 - 1,
-    math.random() * 2 - 1,
-    math.random() * 2 - 1
-  ):norm()
-end
-
---- Constructs new vector. Call Vec() directly to achieve same result
--- @param x number | table | Vec = 0
--- @param y number = 0
--- @param z number = 0
--- @return Vec
--- @usage Vec(1, 0, 0)
--- @usage Vec({1, 0, 0})
--- @usage Vec({x = 1, y = 0, z = 0})
--- @usage Vec(anotherVector)
-function Vec.from(x, y, z)
-  if (type(x) == 'table') then
-    return Vec.from(x.x or x[1], x.y or x[2], x.z or x[3])
-  end
-  
-  local v = {}
-
-  v.x = x or 0
-  v.y = y or 0
-  v.z = z or 0
-  
-  setmetatable(v, Vec.mt)
-
-  return v
 end
